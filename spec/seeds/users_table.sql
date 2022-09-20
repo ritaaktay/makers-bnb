@@ -4,3 +4,5 @@ CREATE TABLE users (
   password text, 
   username text UNIQUE
 );
+
+

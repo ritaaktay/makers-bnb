@@ -12,7 +12,7 @@ CREATE TABLE requests (
 
 TRUNCATE TABLE requests RESTART IDENTITY;
 
-INSERT INTO request ('date', 'user_id', 'listing_id', 'current_status') VALUES
-(2022-09-20, 1, 1, 'pending'),
-(2022-08-20, 1, 1, 'confirmed'),
-(2022-09-20, 2, 1, 'declined');
+INSERT INTO requests ("date", "user_id", "listing_id", "current_status") VALUES
+('2022-9-20', 1, 1, 'pending'),
+('2022-8-20', 1, 1, 'confirmed'),
+('2022-9-20', 2, 1, 'declined');

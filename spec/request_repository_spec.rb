@@ -3,7 +3,7 @@ require 'request_repository'
 require 'request'
 
 def reset_request_table
-  seed_sql = File.read('spec/seeds/seed_requests.sql')
+  seed_sql = File.read('spec/seeds/test_seeds.sql')
   connection = PG.connect({ host: '127.0.0.1', dbname: 'makersbnb_test' })
   connection.exec(seed_sql)
 end

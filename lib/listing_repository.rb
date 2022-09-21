@@ -20,9 +20,22 @@ class ListingRepository
     return listings
   end
 
-  def create
+  def create(listing)
+    sql = 'INSERT INTO listings (price_per_night, availability, space_id) VALUES ($1, $2, $3) RETURNING id;'
+    params = [listing.price_per_night, '{}', listing.space_id]
+    result = DatabaseConnection.exec_params(sql, params)
+    # the id of newly created listing in database
+    id = result[0]["id"]
+    # Date objects converted into strings in array
+    date_strings = listing.availability.map { |date| "#{date.strftime("%Y-%m-%d")}"} 
+    # Need array_append query per date to add dates to array
+    date_strings.each do |date|
+      sql = 'UPDATE listings SET availability = array_append(availability, $1) WHERE id = $2;'
+      params = [date, id]
+      DatabaseConnection.exec_params(sql, params)
+    end
   end
 
-  def mark_unavailabel(date) #string or Date object?
+  def mark_unavailabel(date) #Is this a string or Date object?
   end
 end

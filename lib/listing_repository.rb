@@ -12,6 +12,7 @@ class ListingRepository
       listing.price_per_night = record['price_per_night'].to_i
       # converts string into an array of Date obejects
       dates = record['availability']
+      binding.irb
       array = dates[1...dates.length-1].split(",")
       listing.availability = array.map!{ |date| Date.parse(date)}
       listing.space_id = record['space_id'].to_i
@@ -43,6 +44,7 @@ class ListingRepository
     # assuming order in listing.availability matches order in SQL array
     index = listing.availability.find_index(date)
     # fix query
+    # use regex to remove a date 
     sql = 'UPDATE listings SET availability = ARRAY_DELETE ( availability, $1 ) WHERE id = $2;'
     params = [index, listing.id]
     DatabaseConnection.exec_params(sql,params)

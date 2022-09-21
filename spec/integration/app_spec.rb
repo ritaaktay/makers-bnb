@@ -23,6 +23,23 @@ describe Application do
       response = get('/')
 
       expect(response.status).to eq(200)
+      expect(response.body).to include('<label for="username">Username</label>')
+      expect(response.body).to include('<input type="submit" value="Sign up">')
+    end
+
+    it 'should create a new user' do
+      response = post('/signup', 
+                params = {username: 'test', 
+                          email: 'test@test.com', 
+                          password: 'test'})
+      repo = UserRepository.new
+      user = repo.find(5)
+
+      expect(response.status).to eq 302
+      expect(user.username).to eq 'test'
+
+      response = get('/')
+      expect(response.body).to include('<a href="/sessions/logout">Logout</a>')
     end
   end
 end

@@ -36,6 +36,15 @@ class ListingRepository
     end
   end
 
-  def mark_unavailable(date) #Is this a string or Date object?
+  def mark_unavailable(listing, date) #date is a string "2022-10-09" from request.date
+    #need an SQL query to remove item from array 
+    #or overwrite the whole array if not possible
+    date = Date.parse(date)
+    # assuming order in listing.availability matches order in SQL array
+    index = listing.availability.find_index(date)
+    # fix query
+    sql = 'UPDATE listings SET availability = ARRAY_DELETE ( availability, $1 ) WHERE id = $2;'
+    params = [index, listing.id]
+    DatabaseConnection.exec_params(sql,params)
   end
 end

@@ -36,5 +36,11 @@ RSpec.describe ListingRepository do
   end
 
   it 'marks a date as unavailable' do
+    listing = repo.all[0]
+    date = '2022-09-10'
+    repo.mark_unavailable(listing, date)
+    listing = repo.all[0]
+    expect(listing.availability.length).to eq 4
+    expect(listing.availability.select {|x| Date.parse(date)}).to eq [] #check if unmatching select returns [] or nil
   end
 end

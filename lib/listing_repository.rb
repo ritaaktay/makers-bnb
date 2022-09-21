@@ -36,6 +36,6 @@ class ListingRepository
     end
   end
 
-  def mark_unavailabel(date) #Is this a string or Date object?
+  def mark_unavailable(date) #Is this a string or Date object?
   end
 end

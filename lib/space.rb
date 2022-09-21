@@ -1,3 +1,3 @@
 class Space
-    attr_accessor :id, :name, :description
+    attr_accessor :id, :user_id, :name, :description
 end

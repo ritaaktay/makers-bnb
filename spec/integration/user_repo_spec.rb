@@ -5,7 +5,7 @@ RSpec.describe UserRepository do
   let(:repo) {UserRepository.new}
 
   before(:each) do
-    sql = File.read('spec/seeds/users_table_seeds.sql')
+    sql = File.read('spec/seeds/test_seeds.sql')
     connection = PG.connect({ host: '127.0.0.1', dbname: 'makersbnb_test'})
     connection.exec(sql)
   end

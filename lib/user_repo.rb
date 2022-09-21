@@ -1,8 +1,11 @@
 class UserRepository
   def create(user)
-    sql = 'INSERT INTO users (username, email, password) VALUES ($1, $2, $3);'
+    sql = 'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id;'
     params = [user.username, user.email, user.password]
-    DatabaseConnection.exec_params(sql, params)
+    results = DatabaseConnection.exec_params(sql, params)
+    # sets user ID for returning full user object
+    user.id = results.first['id'].to_i # convert to integer
+    return user
   end
 
   def find(id)

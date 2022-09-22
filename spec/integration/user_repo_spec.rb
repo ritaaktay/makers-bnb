@@ -6,7 +6,13 @@ RSpec.describe UserRepository do
 
   before(:each) do
     sql = File.read('spec/seeds/test_seeds.sql')
-    connection = PG.connect({ host: '127.0.0.1', dbname: 'makersbnb_test'})
+    if ENV['PGPASSWORD'].nil?
+      connection = PG.connect({ host: '127.0.0.1', dbname: 'makersbnb_test' })
+    else
+      connection = PG.connect({
+        host: '127.0.0.1', dbname: 'makersbnb_test',
+        user: ENV['PGUSERNAME'], password: ENV['PGPASSWORD'] })
+    end
     connection.exec(sql)
   end
 

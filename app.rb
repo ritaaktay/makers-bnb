@@ -86,4 +86,8 @@ class Application < Sinatra::Base
     # Currently a place holder for spaces/new for testing
     return erb :index, :layout => :main_layout
   end
+
+  get '/requests' do
+    
+  end
 end

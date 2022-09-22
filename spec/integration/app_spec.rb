@@ -163,5 +163,19 @@ describe Application do
       expect(response.status).to eq 302
     end
   end
+  
+  # NOT TESTED, IN PROGRESS!!!!!!!!!!!!!!!!!!!!!
+  context 'GET /requests' do
+    it 'should list requests made and received' do
+      post('/sessions/login', 
+                params = {email: 'thomas@gmail.com', password: 'coffee'})
+      response = get('/requests')
+
+      expect(response.status).to eq 200
+      expect(response.body).to include 'Super fancy awesome apartment'
+      expect(response.body).to include 'Declined'
+      expect(response.body).to include '2022-09-20'
+    end
+  end
 end
 

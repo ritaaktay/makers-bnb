@@ -57,6 +57,6 @@ class Application < Sinatra::Base
   
   get '/spaces' do
     # Currently a place holder for spaces for testing
-    return erb :login, :layout => :main_layout
+    return erb :index, :layout => :main_layout
   end
 end

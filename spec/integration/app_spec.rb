@@ -80,6 +80,16 @@ describe Application do
       expect(response.body).to include ('6. A new space')
     end
   end
+
+  context 'GET /spaces/new' do
+    it 'should get the new spaces page' do
+      response = get ('/spaces/new')
+
+      expect(response.status).to eq 200
+      expect(response.body).to include('<form method="POST" action="/spaces/new">')
+    end
+  end
+
   describe 'GET /sessions/login' do
     it 'should GET the login page' do
       response = get('/sessions/login')

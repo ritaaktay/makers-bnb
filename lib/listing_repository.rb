@@ -1,5 +1,5 @@
-require 'database_connection'
-require 'listing'
+require_relative 'database_connection'
+require_relative 'listing'
 
 class ListingRepository 
   def all

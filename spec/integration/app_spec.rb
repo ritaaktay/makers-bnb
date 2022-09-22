@@ -86,7 +86,7 @@ describe Application do
                 params = {email: 'thomas@gmail.com', password: 'coffee'})
       expect(response.status).to eq 302
       expect(session_tracker[:user_id]).to eq 2
-      response = post('/sessions/logout')
+      response = get('/sessions/logout')
       expect(response.status).to eq 302
       expect(session_tracker[:user_id]).to eq nil
       end

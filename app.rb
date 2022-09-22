@@ -48,7 +48,7 @@ class Application < Sinatra::Base
     end
   end
 
-  post '/sessions/logout' do
+  get '/sessions/logout' do
     session.clear
     redirect '/'
   end

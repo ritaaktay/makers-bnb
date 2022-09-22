@@ -7,7 +7,31 @@ def session_tracker
   last_request.env['rack.session']
 end
 
+
+def reset_tables
+  seed_sql = File.read('spec/seeds/test_seeds.sql')
+  if ENV['PGPASSWORD'].nil?
+    connection = PG.connect({ host: '127.0.0.1', dbname: 'makersbnb_test' })
+  else
+    connection = PG.connect({
+      host: '127.0.0.1', dbname: 'makersbnb_test',
+      user: ENV['PGUSERNAME'], password: ENV['PGPASSWORD'] })
+  end
+  connection.exec(seed_sql)
+end
+
 describe Application do
+  before(:each) do
+    reset_tables
+  end
+
+  after(:each) do
+    if !session_tracker.nil?
+      get '/sessions/logout'
+    end
+  end
+
+# describe Application do # TODO REMOVE
   # This is so we can use rack-test helper methods.
   include Rack::Test::Methods
 
@@ -30,22 +54,42 @@ describe Application do
       expect(response.body).to include('<label for="username">Username</label>')
       expect(response.body).to include('<input type="submit" value="Sign up">')
     end
+
+    it 'should not appear if logged in' do
+      post('/sessions/login', 
+           params = {email: 'thomas@gmail.com', password: 'coffee'})
+      response = get('/')
+      expect(response.status).to eq 302
+    end
   end
 
   context 'POST /signup' do
     it 'should create a new user' do
+      post('/sessions/login', 
+           params = {email: 'thomas@gmail.com', password: 'coffee'})
       response = post('/signup', 
                 params = {username: 'test', 
                           email: 'test@test.com', 
                           password: 'test'})
       repo = UserRepository.new
-      user = repo.find(5)
+
+      expect{ repo.find(5) }.to raise_error 'Index 0 is out of range'
 
       expect(response.status).to eq 302
-      expect(user.username).to eq 'test'
-
-      response = get('/')
+      response = get('/spaces')
       expect(response.body).to include('<a href="/sessions/logout">Logout</a>')
+    end
+
+    it 'should be unavailable if logged in' do
+      response = post('/signup', 
+                params = {username: 'test', 
+                          email: 'test@test.com', 
+                          password: 'test'})
+      repo = UserRepository.new
+      users = repo.find(5)
+
+      expect(response.status).to eq 302
+
     end
   end
 
@@ -57,6 +101,14 @@ describe Application do
       expect(response.body).to include('<label for="email">Email</label>')
       expect(response.body).to include('<input type="submit" value="Login">')
     end
+
+    it 'should not return login if logged in' do
+      post('/sessions/login', 
+            params = {email: 'thomas@gmail.com', password: 'coffee'})
+
+      response = get('/sessions/login')
+      expect(response.status).to eq(302)
+    end
   end
 
   describe 'POST /sessions/login' do
@@ -64,7 +116,7 @@ describe Application do
       response = post('/sessions/login', 
                 params = {email: 'thomas@gmail.com', password: 'coffee'})
       expect(response.status).to eq 302
-      response = get('/')
+      response = get('/spaces')
       expect(response.status).to eq 200
       expect(response.body).to include('<a href="/sessions/logout">Logout</a>')
       expect(session_tracker[:user_id]).to eq 2

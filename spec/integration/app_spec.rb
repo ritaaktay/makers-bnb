@@ -3,6 +3,10 @@ require "rack/test"
 require_relative '../../app'
 require 'json'
 
+def session_tracker
+  last_request.env['rack.session']
+end
+
 describe Application do
   # This is so we can use rack-test helper methods.
   include Rack::Test::Methods
@@ -44,6 +48,51 @@ describe Application do
       expect(response.body).to include('<a href="/sessions/logout">Logout</a>')
     end
   end
+
+  describe 'GET /sessions/login' do
+    it 'should GET the login page' do
+      response = get('/sessions/login')
+
+      expect(response.status).to eq(200)
+      expect(response.body).to include('<label for="email">Email</label>')
+      expect(response.body).to include('<input type="submit" value="Login">')
+    end
+  end
+
+  describe 'POST /sessions/login' do
+    it 'on successful login should POST to /sessions/login' do
+      response = post('/sessions/login', 
+                params = {email: 'thomas@gmail.com', password: 'coffee'})
+      expect(response.status).to eq 302
+      response = get('/')
+      expect(response.status).to eq 200
+      expect(response.body).to include('<a href="/sessions/logout">Logout</a>')
+      expect(session_tracker[:user_id]).to eq 2
+    end
+
+    it 'should send to login on wrong password' do
+      response = post('/sessions/login', 
+                params = {email: 'thomas@gmail.com', password: 'no coffee'})
+      expect(response.status).to eq 302
+      response = get('/sessions/login')
+      expect(response.status).to eq 200
+      expect(response.body).to include('<a href="/sessions/login">Login</a>')
+      expect(response.body).to include('<form action="/sessions/login"')
+      expect(session_tracker[:user_id]).to eq nil
+    end
+  end
+
+  describe 'GET /sessions/logout' do
+    it 'should log out the user' do
+      response = post('/sessions/login', 
+                params = {email: 'thomas@gmail.com', password: 'coffee'})
+      expect(response.status).to eq 302
+      expect(session_tracker[:user_id]).to eq 2
+      response = get('/sessions/logout')
+      expect(response.status).to eq 302
+      expect(session_tracker[:user_id]).to eq nil
+      end
+    end
     
   context 'GET /spaces' do 
     it 'should list the spaces' do

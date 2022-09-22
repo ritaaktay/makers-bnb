@@ -3,10 +3,25 @@ require "rack/test"
 require_relative '../../app'
 require 'json'
 
+def reset_table
+  seed_sql = File.read('spec/seeds/test_seeds.sql')
+    if ENV['PGPASSWORD'].nil?
+      connection = PG.connect({ host: '127.0.0.1', dbname: 'makersbnb_test' })
+    else
+      connection = PG.connect({
+        host: '127.0.0.1', dbname: 'makersbnb_test',
+        user: ENV['PGUSERNAME'], password: ENV['PGPASSWORD'] })
+    end
+  connection.exec(seed_sql)
+end
+
 describe Application do
   # This is so we can use rack-test helper methods.
   include Rack::Test::Methods
 
+  before(:each) do
+    reset_table
+  end
   # We need to declare the `app` value by instantiating the Application
   # class so our tests work.
   let(:app) { Application.new }
@@ -42,6 +57,23 @@ describe Application do
 
       response = get('/')
       expect(response.body).to include('<a href="/sessions/logout">Logout</a>')
+    end
+  end
+
+  context 'POST /spaces/new' do
+    it 'should' do
+      response = post('/spaces/new',
+                      params = {
+                        name: 'A new space',
+                        description: 'A nice new space',
+                        price_per_night: 100,
+                        start_date: '2022-09-10',
+                        end_date: '2022-09-20'
+                      })
+      expect(response.status).to eq 302
+     
+      response = get('/spaces')
+      expect(response.body).to include ('6. A new space')
     end
   end
     

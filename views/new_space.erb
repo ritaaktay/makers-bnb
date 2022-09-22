@@ -1,0 +1,27 @@
+<h1> List a Space </h1>
+
+<form method="POST" action="/spaces/new">
+    <div>
+        <label>Name</label>
+        <input type="text" name="name" />
+    </div>
+    <div>
+        <label>Description</label>
+        <input type="text" name="description" />
+    </div>
+    <div>
+        <label>Price per night</label>
+        <input type="number" name="price_per_night" />
+    </div>
+    <div>
+        <label>Start date:</label>
+        <input type="date" name="start_date" />
+    </div>
+    <div>
+        <label>End date:</label>
+        <input type="date" name="end_date" />
+    </div>
+    <a href="/spaces">
+    <input type="submit" value="List my Space"/>
+    </a>
+</form>

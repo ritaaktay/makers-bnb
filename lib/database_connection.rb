@@ -25,7 +25,14 @@ class DatabaseConnection
       exit
     end
 
-    @connection = PG.connect({ host: @host, dbname: @database_name })
+    if ENV['PGPASSWORD'].nil?
+      @connection = PG.connect({ host: @host, dbname: @database_name })
+    else
+      @connection = PG.connect({
+        host: @host, dbname: @database_name,
+        user: ENV['PGUSERNAME'], password: ENV['PGPASSWORD'] })
+    end
+
     puts "Connected to the database successfully.".green unless test_mode?
   rescue PG::Error => e
     exit_with_helpful_connection_message(e)

@@ -16,30 +16,30 @@ INSERT INTO spaces (user_id, name, description)
          (1, 'Small, humble castle', 'Room service available, but only 2 pools');
 
 INSERT INTO listings (price_per_night, availability, space_id)
-  VALUES (25, '{
-    "2022-09-10", 
-    "2022-09-11",
-    "2022-09-12",
-    "2022-09-20", 
-    "2022-09-21"
-    }',
+  VALUES (25, ARRAY [
+    DATE '2022-09-10', 
+    DATE '2022-09-11',
+    DATE '2022-09-12',
+    DATE '2022-09-20', 
+    DATE '2022-09-21'
+    ],
     1),
-    (15, '{
-      "2022-07-10",
-      "2022-07-11"
-    }',
+    (15, ARRAY [
+      DATE '2022-07-10',
+      DATE '2022-07-11'
+    ],
     2),
-    (20, '{
-      "2022-06-19",
-      "2022-10-20",
-      "2022-11-20"
-    }',
+    (20, ARRAY [
+      DATE '2022-06-19',
+      DATE '2022-10-20',
+      DATE '2022-11-20'
+    ],
     3),
-    (40, '{
-      "2022-12-24",
-      "2022-12-25",
-      "2022-12-26"
-    }',
+    (40, ARRAY [
+      DATE '2022-12-24',
+      DATE '2022-12-25',
+      DATE '2022-12-26'
+    ],
     2);
 
 INSERT INTO requests (date, user_id, listing_id, current_status) VALUES

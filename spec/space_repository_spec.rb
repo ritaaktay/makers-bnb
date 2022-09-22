@@ -1,7 +1,22 @@
 require 'space_repository'
 
+def reset_request_table
+  seed_sql = File.read('spec/seeds/test_seeds.sql')
+  if ENV['PGPASSWORD'].nil?
+    connection = PG.connect({ host: '127.0.0.1', dbname: 'makersbnb_test' })
+  else
+    connection = PG.connect({
+      host: '127.0.0.1', dbname: 'makersbnb_test',
+      user: ENV['PGUSERNAME'], password: ENV['PGPASSWORD'] })
+  end
+  connection.exec(seed_sql)
+end
+
 describe SpaceRepository do
-    let(:repo) {SpaceRepository.new}
+  before(:each) do
+    reset_request_table
+  end
+  let(:repo) {SpaceRepository.new}
 
   it 'returns all spaces' do
 

@@ -26,7 +26,9 @@ describe Application do
       expect(response.body).to include('<label for="username">Username</label>')
       expect(response.body).to include('<input type="submit" value="Sign up">')
     end
+  end
 
+  context 'POST /signup' do
     it 'should create a new user' do
       response = post('/signup', 
                 params = {username: 'test', 
@@ -42,4 +44,23 @@ describe Application do
       expect(response.body).to include('<a href="/sessions/logout">Logout</a>')
     end
   end
+    
+  context 'GET /spaces' do 
+    it 'should list the spaces' do
+      response  =  get('/spaces')
+
+      expect(response.status).to eq 200
+      expect(response.body).to include ('<input type="submit" value="List a Space">')
+    end
+  end
+  
+ 
+  context 'POST /spaces' do
+    it 'should redirect to spaces new' do
+      response = post('/spaces')
+
+      expect(response.status).to eq 302
+    end
+  end
 end
+

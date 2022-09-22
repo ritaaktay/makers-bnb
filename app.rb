@@ -3,6 +3,9 @@ require 'sinatra/reloader'
 require './lib/database_connection'
 require './lib/user_repo'
 require './lib/user'
+require './lib/space'
+require './lib/space_repository'
+
 
 DatabaseConnection.connect('makersbnb_test')
 
@@ -29,7 +32,19 @@ class Application < Sinatra::Base
   end
 
   get '/spaces' do
-    # Currently a place holder for spaces for testing
+    repo = SpaceRepository.new
+    @spaces = repo.all
+
+    return erb :spaces, :layout => :main_layout
+  end
+
+  post '/spaces' do
+    
+    redirect '/spaces/new'
+  end
+
+  get '/spaces/new' do
+    # Currently a place holder for spaces/new for testing
     return erb :index, :layout => :main_layout
   end
 end

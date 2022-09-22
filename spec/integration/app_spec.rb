@@ -117,7 +117,7 @@ describe Application do
       expect(response.status).to eq 302
       response = get('/sessions/login')
       expect(response.status).to eq 200
-      expect(response.body).to include('<a href="/sessions/login">Login</a>')
+      expect(response.body).to include('<a href="/">Signup</a>')
       expect(response.body).to include('<form action="/sessions/login"')
       expect(session_tracker[:user_id]).to eq nil
     end

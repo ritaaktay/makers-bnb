@@ -38,7 +38,7 @@ class Application < Sinatra::Base
   ############################## LOG IN / LOG OUT ##############################
 
   get '/sessions/login' do
-    return erb :login, :layout => :main_layout
+    return erb :login
   end
 
   post '/sessions/login' do

@@ -13,6 +13,8 @@ class Application < Sinatra::Base
 
   enable :sessions
 
+  ############################## HOME/SIGNUP ##############################
+
   get '/' do
     return erb :index, :layout => :main_layout
   end
@@ -28,8 +30,33 @@ class Application < Sinatra::Base
     redirect '/spaces'
   end
 
+  ############################## LOG IN / LOG OUT ##############################
+
+  get '/sessions/login' do
+    return erb :login, :layout => :main_layout
+  end
+
+  post '/sessions/login' do
+    repo = UserRepository.new
+    user = repo.find_by_email(params[:email])
+    if user.password == params[:password]
+      session[:user_id] = user.id
+      # /spaces currently still a placeholder until it is created
+      redirect '/spaces'
+    else
+      redirect '/sessions/login'
+    end
+  end
+
+  post '/sessions/logout' do
+    session.clear
+    redirect '/'
+  end
+
+  ############################## SPACES ##############################
+  
   get '/spaces' do
     # Currently a place holder for spaces for testing
-    return erb :index, :layout => :main_layout
+    return erb :login, :layout => :main_layout
   end
 end

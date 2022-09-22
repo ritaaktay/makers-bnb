@@ -34,4 +34,11 @@ RSpec.describe UserRepository do
     expect(user.password).to eq 'coffee'
     expect(user.email).to eq 'thomas@gmail.com'
   end
+
+  it 'finds a user by email' do
+    user = repo.find_by_email('thomas@gmail.com')
+    expect(user.username).to eq 'Thomas Mannion'
+    expect(user.password).to eq 'coffee'
+    expect(user.email).to eq 'thomas@gmail.com'
+  end
 end

@@ -1,0 +1,13 @@
+    <h1>Book a Space</h1>
+    <a href="/spaces/new">
+    <input type="submit" value="List a Space">
+    </a>
+
+    <% @spaces.each do |space| %>
+
+    <div>
+	<h3> <%= space.id %>. <%= space.name %> </h3>
+	<p> <%= space.description %> </p>
+	</div>
+				
+    <% end %>

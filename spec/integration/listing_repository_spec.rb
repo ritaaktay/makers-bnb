@@ -39,8 +39,9 @@ RSpec.describe ListingRepository do
     listing = repo.all[0]
     date = '2022-09-10'
     repo.mark_unavailable(listing, date)
-    listing = repo.all[0]
+    # second entry becomes the first element in the array
+    listing = repo.all.last
     expect(listing.availability.length).to eq 4
-    expect(listing.availability.select {|x| Date.parse(date)}).to eq [] #check if unmatching select returns [] or nil
+    expect(listing.availability.select {|x| x == Date.parse(date)}).to eq []
   end
 end

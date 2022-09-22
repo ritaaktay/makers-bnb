@@ -11,7 +11,7 @@
       <nav>
         <div>
           <% if session[:user_id].nil? %>
-            <a href="/sessions/new">Login</a>
+            <a href="/sessions/login">Login</a>
           <% else %>
             <a href="/spaces">Spaces</a> | <a href="/requests">Requests</a> |
             <a href="/sessions/logout">Logout</a>

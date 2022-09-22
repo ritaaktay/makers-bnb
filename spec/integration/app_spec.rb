@@ -3,6 +3,18 @@ require "rack/test"
 require_relative '../../app'
 require 'json'
 
+def reset_table
+  seed_sql = File.read('spec/seeds/test_seeds.sql')
+    if ENV['PGPASSWORD'].nil?
+      connection = PG.connect({ host: '127.0.0.1', dbname: 'makersbnb_test' })
+    else
+      connection = PG.connect({
+        host: '127.0.0.1', dbname: 'makersbnb_test',
+        user: ENV['PGUSERNAME'], password: ENV['PGPASSWORD'] })
+    end
+  connection.exec(seed_sql)
+end
+ 
 def session_tracker
   last_request.env['rack.session']
 end
@@ -35,6 +47,9 @@ describe Application do
   # This is so we can use rack-test helper methods.
   include Rack::Test::Methods
 
+  before(:each) do
+    reset_table
+  end
   # We need to declare the `app` value by instantiating the Application
   # class so our tests work.
   let(:app) { Application.new }
@@ -93,6 +108,32 @@ describe Application do
     end
   end
 
+  context 'POST /spaces/new' do
+    it 'should' do
+      response = post('/spaces/new',
+                      params = {
+                        name: 'A new space',
+                        description: 'A nice new space',
+                        price_per_night: 100,
+                        start_date: '2022-09-10',
+                        end_date: '2022-09-20'
+                      })
+      expect(response.status).to eq 302
+     
+      response = get('/spaces')
+      expect(response.body).to include ('6. A new space')
+    end
+  end
+
+  context 'GET /spaces/new' do
+    it 'should get the new spaces page' do
+      response = get ('/spaces/new')
+
+      expect(response.status).to eq 200
+      expect(response.body).to include('<form method="POST" action="/spaces/new">')
+    end
+  end
+
   describe 'GET /sessions/login' do
     it 'should GET the login page' do
       response = get('/sessions/login')
@@ -128,7 +169,7 @@ describe Application do
       expect(response.status).to eq 302
       response = get('/sessions/login')
       expect(response.status).to eq 200
-      expect(response.body).to include('<a href="/sessions/login">Login</a>')
+      expect(response.body).to include('<a href="/">Signup</a>')
       expect(response.body).to include('<form action="/sessions/login"')
       expect(session_tracker[:user_id]).to eq nil
     end

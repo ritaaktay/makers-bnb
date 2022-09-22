@@ -21,24 +21,36 @@ class Application < Sinatra::Base
   ############################## HOME/SIGNUP ##############################
 
   get '/' do
-    return erb :index, :layout => :main_layout
+    if session[:user_id].nil?
+      return erb :index, :layout => :main_layout
+    else
+      redirect '/spaces'
+    end
   end
 
   post '/signup' do
-    repo = UserRepository.new
-    user = User.new
-    user.username = params[:username]
-    user.email = params[:email]
-    user.password = params[:password]
-    user = repo.create(user)
-    session[:user_id] = user.id
-    redirect '/spaces'
+    if session[:user_id].nil?
+      repo = UserRepository.new
+      user = User.new
+      user.username = params[:username]
+      user.email = params[:email]
+      user.password = params[:password]
+      user = repo.create(user)
+      session[:user_id] = user.id
+      redirect '/spaces'
+    else
+      redirect '/spaces'
+    end
   end
 
   ############################## LOG IN / LOG OUT ##############################
 
   get '/sessions/login' do
-    return erb :login
+    if session[:user_id].nil?
+      return erb :login
+    else
+      redirect '/spaces'
+    end
   end
 
   post '/sessions/login' do

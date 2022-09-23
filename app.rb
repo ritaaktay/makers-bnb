@@ -3,10 +3,14 @@ require 'sinatra/reloader'
 require './lib/database_connection'
 require './lib/user_repo'
 require './lib/user'
+require './lib/request'
+require './lib/request_repository'
 require './lib/space'
 require './lib/space_repository'
 require './lib/listing_repository'
 require './lib/listing'
+require './lib/request.rb'
+require './lib/request_repository.rb'
 
 
 DatabaseConnection.connect('makersbnb_test')
@@ -130,4 +134,43 @@ class Application < Sinatra::Base
       return erb :space, :layout => :main_layout
     end
   end
+  ############################## REQUESTS ##############################
+
+  get '/requests' do
+    if session[:user_id].nil?
+      redirect '/'
+    else
+      repo = UserRepository.new
+      @requests_made = repo.requests_made(session[:user_id])
+      @requests_received = repo.requests_received(session[:user_id])
+      return erb :requests, :layout => :main_layout
+    end
+  end
+
+  get '/requests/:id' do
+    request_repo = RequestRepository.new 
+    listing_repo = ListingRepository.new 
+    space_repo = SpaceRepository.new 
+    user_repo = UserRepository.new
+    @requests = request_repo.find(params[:id])
+    @users = user_repo.find(@requests.user_id)
+    listing = listing_repo.find(@requests.listing_id)
+    # binding.irb
+    @spaces = space_repo.find(listing.space_id)
+    return erb :request, :layout => :main_layout
+  end
+
+  post '/requests' do
+    request = Request.new
+    
+    request.user_id = params[:user_id]
+    request.listing_id = params[:listing_id]
+    request.date = params[:date]
+    request.current_status = 'pending'
+
+    repo = RequestRepository.new
+    repo.create(request)
+    redirect '/requests'
+  end
+
 end

@@ -222,5 +222,73 @@ describe Application do
       expect(response.body).to include '2022-09-10'
     end
   end
+  
+  context 'GET /requests' do
+    it 'should list requests made' do
+      post('/sessions/login', 
+                params = {email: 'thomas@gmail.com', password: 'coffee'})
+      response = get('/requests')
+
+      expect(response.status).to eq 200
+      expect(response.body).to include 'Requests made'
+      expect(response.body).to include 'Super fancy awesome apartment'
+      expect(response.body).to include 'Declined'
+      expect(response.body).to include '2022-09-20'
+    end
+
+    it 'should list requests received' do
+      post('/sessions/login', 
+                params = {email: 'thomas@gmail.com', password: 'coffee'})
+      response = get('/requests')
+
+      expect(response.status).to eq 200
+      expect(response.body).to include 'Requests received'
+      expect(response.body).to include 'Small house, oh no'
+      expect(response.body).to include 'Pending'
+      expect(response.body).to include 'Declined'
+      expect(response.body).to include('2022-07-10').at_least(3).times
+    end
+
+    it 'should redirect when not logged in' do
+      response = get('/requests')
+
+      expect(response.status).to eq 302
+    end
+  end
+
+  context 'GET /requests/:id' do
+    it 'gets a single request by id' do
+      response = get('/requests/1')
+      expect(response.status).to eq 200
+      expect(response.body).to include 'Request for \'Super fancy awesome apartment\''
+      expect(response.body).to include 'From: rita@gmail.com'
+      expect(response.body).to include 'Date: 2022-09-10'
+      expect(response.body).to include 'Status: pending'
+      expect(response.body).to include '<input type="submit" value="Decline"/>'
+      expect(response.body).to include '<input type="submit" value="Confirm"/>'
+    end
+
+    it 'gets a single request by id' do
+      response = get('/requests/2')
+      expect(response.status).to eq 200
+      expect(response.body).to include 'Request for \'Super fancy awesome apartment\''
+      expect(response.body).to include 'From: rita@gmail.com'
+      expect(response.body).to include 'Date: 2022-09-15'
+      expect(response.body).to include 'Status: confirmed'
+      expect(response.body).not_to include '<input type="submit" value="Decline">'
+      expect(response.body).not_to include '<input type="submit" value="Confirm">'
+    end
+  end
+  
+  context 'POST /requests' do
+    it 'creates a new request and redirects to GET /requests' do
+      response = post('/requests', 
+      params = {user_id: '1', listing_id: '1', date: '2022-09-10'})
+      expect(response.status).to eq 302
+      expect(response.body).to include '2022-09-10'
+      expect(response.body).to include 'pending'
+      expect(response.body).to include 'Super fancy awesome apartment'
+    end
+  end
 end
 

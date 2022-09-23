@@ -6,11 +6,17 @@
 
 <% if @requests.current_status == 'pending' %>
 
-<form method="PATCH" action="/requests/declined">
+<form method="post" action="/requests/declined">
+    <input type="hidden" name="listing_id" value="<%=@request.listing_id%>" />
+    <input type="hidden" name="date" value="<%=@request.date%>" />
+    <input type="hidden" name="request_id" value="<%=@request.id%>" />
     <input type="submit" value="Decline"/>
 </form>
 
-<form method="PATCH" action="/requests/accepted">
+<form method="post" action="/requests/accepted">
+    <input type="hidden" name="listing_id" value="<%=@request.listing_id%>" />
+    <input type="hidden" name="date" value="<%=@request.date%>" />
+    <input type="hidden" name="request_id" value="<%=@request.id%>" />
     <input type="submit" value="Confirm"/>
 </form>
 

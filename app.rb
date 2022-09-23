@@ -75,11 +75,11 @@ class Application < Sinatra::Base
   get '/spaces' do
     repo = SpaceRepository.new
     @spaces = repo.all
-    # if session[:user_id].nil?
-    #   return erb :login
-    # else
+    if session[:user_id].nil?
+      return erb :login
+    else
       return erb :spaces, :layout => :main_layout
-    # end 
+    end 
   end
 
   post '/spaces' do
@@ -87,11 +87,11 @@ class Application < Sinatra::Base
   end
 
   get '/spaces/new' do
-    # if session[:user_id].nil?
-    #   return erb :login
-    # else
+    if session[:user_id].nil?
+      return erb :login
+    else
       return erb :new_space, :layout => :main_layout
-    # end 
+    end 
   end
 
   post '/spaces/new' do
@@ -118,9 +118,9 @@ class Application < Sinatra::Base
 
   get '/spaces/:id' do
     
-    # if session[:user_id].nil?
-    #   return erb :login
-    # else
+    if session[:user_id].nil?
+      return erb :login
+    else
       id = params[:id]
       @user_id = session[:user_id]
       repo = SpaceRepository.new
@@ -128,6 +128,6 @@ class Application < Sinatra::Base
       listing_repo = ListingRepository.new
       @listings = listing_repo.find(@space.id)
       return erb :space, :layout => :main_layout
-    # end
+    end
   end
 end

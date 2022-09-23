@@ -110,6 +110,8 @@ describe Application do
 
   context 'POST /spaces/new' do
     it 'should' do
+      post('/sessions/login', 
+        params = {email: 'thomas@gmail.com', password: 'coffee'})
       response = post('/spaces/new',
                       params = {
                         name: 'A new space',
@@ -127,6 +129,8 @@ describe Application do
 
   context 'GET /spaces/new' do
     it 'should get the new spaces page' do
+      post('/sessions/login', 
+        params = {email: 'thomas@gmail.com', password: 'coffee'})
       response = get ('/spaces/new')
 
       expect(response.status).to eq 200
@@ -189,6 +193,8 @@ describe Application do
     
   context 'GET /spaces' do 
     it 'should list the spaces' do
+      post('/sessions/login', 
+        params = {email: 'thomas@gmail.com', password: 'coffee'})
       response  =  get('/spaces')
 
       expect(response.status).to eq 200
@@ -206,6 +212,8 @@ describe Application do
 
   context 'GET /spaces/:id' do
     it "should display a page containing detailed information (space.name, space.description, price_per_night, availability) about that space" do
+      post('/sessions/login', 
+        params = {email: 'thomas@gmail.com', password: 'coffee'})
       response = get('/spaces/1')
       expect(response.status).to eq 200
       expect(response.body).to include 'Super fancy awesome apartment'

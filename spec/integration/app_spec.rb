@@ -205,12 +205,12 @@ describe Application do
   end
 
   context 'GET /spaces/:id' do
-    xit "should display a page containing detailed information (space.name, space.description, price_per_night, availability) about that space" do
+    it "should display a page containing detailed information (space.name, space.description, price_per_night, availability) about that space" do
       response = get('/spaces/1')
       expect(response.status).to eq 200
       expect(response.body).to include 'Super fancy awesome apartment'
       expect(response.body).to include 'The best in the neighbourhood, large fridge and awesome view.'
-      expect(response.body).to include 25
+      expect(response.body).to include '25'
       expect(response.body).to include '2022-09-10'
     end
   end

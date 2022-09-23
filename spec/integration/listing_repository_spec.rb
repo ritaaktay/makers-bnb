@@ -50,4 +50,15 @@ RSpec.describe ListingRepository do
     expect(listing.availability.length).to eq 4
     expect(listing.availability.select {|x| x == Date.parse(date)}).to eq []
   end
+
+  it 'finds listings by space.id' do
+    space_id = 2
+    listings = repo.find(space_id)
+    first_listing = listings.first
+    last_listing = listings.last
+    expect(first_listing.id).to eq 2
+    expect(first_listing.price_per_night).to eq 15
+    expect(last_listing.price_per_night).to eq 40
+    expect(first_listing.availability).to eq [Date.parse('2022-07-10'), Date.parse('2022-07-11')]
+  end
 end

@@ -1,1 +1,20 @@
-<h1><%=  %></h1>
+<h1><%= @space.name %></h1>
+<p><%= @space.description %></p>
+
+
+<% @listings.each do |listing| %>
+<p>
+<form method="POST" action="/requests">
+  <label>Price: £<%= listing.price_per_night %></label><br>
+  <label>Availability:</label>
+  <input type="date" name="date"
+         min="<%= listing.availability.first%>"
+         max="<%= listing.availability.last%>" required><br>
+
+  <input type="hidden" name="user_id" value="<%= @user_id %>">
+  <input type="hidden" name="listing_id" value="<%= listing.id %>">
+
+  <input type="submit" value="submit request" required>
+</form><br>
+</p>       
+<% end %>

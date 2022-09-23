@@ -124,4 +124,18 @@ class Application < Sinatra::Base
     @spaces = space_repo.find(listing.space_id)
     return erb :request, :layout => :main_layout
   end
+
+  post '/requests' do
+    request = Request.new
+    
+    request.user_id = params[:user_id]
+    request.listing_id = params[:listing_id]
+    request.date = params[:date]
+    request.current_status = 'pending'
+
+    repo = RequestRepository.new
+    repo.create(request)
+    redirect '/requests'
+  end
+
 end

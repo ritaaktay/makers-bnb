@@ -228,5 +228,16 @@ describe Application do
       expect(response.body).not_to include '<input type="submit" value="Confirm">'
     end
   end
+  
+  context 'POST /requests' do
+    it 'creates a new request and redirects to GET /requests' do
+      response = post('/requests', 
+      params = {user_id: '1', listing_id: '1', date: '2022-09-10'})
+      expect(response.status).to eq 302
+      expect(response.body).to include '2022-09-10'
+      expect(response.body).to include 'pending'
+      expect(response.body).to include 'Super fancy awesome apartment'
+    end
+  end
 end
 

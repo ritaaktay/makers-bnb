@@ -44,4 +44,18 @@ class ListingRepository
     params = [date, listing.id]
     DatabaseConnection.exec_params(sql,params)
   end
+
+  def find(id)
+    sql = 'SELECT * FROM listings WHERE id = $1;'
+    params = [id]
+    result = DatabaseConnection.exec_params(sql, params)
+    listing = Listing.new
+    listing.id = result[0]["id"]
+    listing.price_per_night = result[0]["price_per_night"]
+    listing.space_id = result[0]["space_id"]
+    dates = result[0]['availability']
+    array = dates[1...dates.length-1].split(",")
+    listing.availability = array.map!{ |date| Date.parse(date)}
+    return listing
+  end
 end

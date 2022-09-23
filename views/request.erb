@@ -1,0 +1,17 @@
+<h1> Request for '<%= @spaces.name %>' </h1>
+
+<p> From: <%= @users.email %> </p>
+<p> Date: <%= @requests.date %> </p>
+<p> Status: <%= @requests.current_status %> </p>
+
+<% if @requests.current_status == 'pending' %>
+
+<form method="PATCH" action="/requests/declined">
+    <input type="submit" value="Decline"/>
+</form>
+
+<form method="PATCH" action="/requests/accepted">
+    <input type="submit" value="Confirm"/>
+</form>
+
+<%end%>

@@ -3,23 +3,23 @@
 <form method="POST" action="/spaces/new">
     <div>
         <label>Name</label>
-        <input type="text" name="name" />
+        <input type="text" name="name" required/>
     </div>
     <div>
         <label>Description</label>
-        <input type="text" name="description" />
+        <input type="text" name="description" required/>
     </div>
     <div>
         <label>Price per night</label>
-        <input type="number" name="price_per_night" />
+        <input type="number" name="price_per_night" required/>
     </div>
     <div>
         <label>Start date:</label>
-        <input type="date" name="start_date" />
+        <input type="date" name="start_date" required/>
     </div>
     <div>
         <label>End date:</label>
-        <input type="date" name="end_date" />
+        <input type="date" name="end_date" required/>
     </div>
     <a href="/spaces">
     <input type="submit" value="List my Space"/>

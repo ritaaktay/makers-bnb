@@ -204,6 +204,39 @@ describe Application do
       expect(response.status).to eq 302
     end
   end
+  
+  context 'GET /requests' do
+    it 'should list requests made' do
+      post('/sessions/login', 
+                params = {email: 'thomas@gmail.com', password: 'coffee'})
+      response = get('/requests')
+
+      expect(response.status).to eq 200
+      expect(response.body).to include 'Requests made'
+      expect(response.body).to include 'Super fancy awesome apartment'
+      expect(response.body).to include 'Declined'
+      expect(response.body).to include '2022-09-20'
+    end
+
+    it 'should list requests received' do
+      post('/sessions/login', 
+                params = {email: 'thomas@gmail.com', password: 'coffee'})
+      response = get('/requests')
+
+      expect(response.status).to eq 200
+      expect(response.body).to include 'Requests received'
+      expect(response.body).to include 'Small house, oh no'
+      expect(response.body).to include 'Pending'
+      expect(response.body).to include 'Declined'
+      expect(response.body).to include('2022-07-10').at_least(3).times
+    end
+
+    it 'should redirect when not logged in' do
+      response = get('/requests')
+
+      expect(response.status).to eq 302
+    end
+  end
 
   context 'GET /requests/:id' do
     it 'gets a single request by id' do

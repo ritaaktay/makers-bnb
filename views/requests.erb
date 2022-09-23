@@ -1,0 +1,27 @@
+<div class="flex">
+  <div class="flex-auto">
+    <h2>Requests made</h2>
+    <% @requests_made.each do |request| %>
+      <% to_display = request[:request] %>
+      <a href="/request/<% to_display.id %>">
+        <h3><%= request[:space_name] %></h3>
+        
+        <p><%= to_display.current_status.capitalize %></p>
+        <p><%= to_display.date %></p>
+      </a>
+    <% end %>
+  </div>
+
+  <div class="flex-auto">
+    <h2>Requests received</h2>
+    <% @requests_received.each do |request| %>
+      <% to_display = request[:request] %>
+      <a href="/request/<% to_display.id %>">
+        <h3><%= request[:space_name] %></h3>
+      
+        <p><%= to_display.current_status.capitalize %></p>
+        <p><%= to_display.date %></p>
+      </a>
+    <% end %>
+  </div>
+</div>

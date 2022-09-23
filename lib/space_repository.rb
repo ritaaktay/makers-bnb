@@ -13,7 +13,18 @@ class SpaceRepository
       space.description = record['description']
       space
     end
-      
+  end
+
+  def find(id)
+    sql = 'SELECT * FROM spaces WHERE id = $1;'
+    params = [id]
+    result = DatabaseConnection.exec_params(sql, params)
+    space = Space.new
+    space.id = result[0]["id"]
+    space.user_id = result[0]["user_id"]
+    space.name = result[0]["name"]
+    space.description = result[0]["description"]
+    return space
   end
   
   def create(space)

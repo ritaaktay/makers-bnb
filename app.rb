@@ -7,6 +7,8 @@ require './lib/space'
 require './lib/space_repository'
 require './lib/listing_repository'
 require './lib/listing'
+require './lib/request.rb'
+require './lib/request_repository.rb'
 
 
 DatabaseConnection.connect('makersbnb_test')
@@ -75,7 +77,6 @@ class Application < Sinatra::Base
   get '/spaces' do
     repo = SpaceRepository.new
     @spaces = repo.all
-
     return erb :spaces, :layout => :main_layout
   end
 
@@ -108,5 +109,19 @@ class Application < Sinatra::Base
     list_repo.create(listing)
 
     redirect '/spaces'
+  end
+
+  ############################## REQUESTS ##############################
+
+  get '/requests/:id' do
+    request_repo = RequestRepository.new 
+    listing_repo = ListingRepository.new 
+    space_repo = SpaceRepository.new 
+    user_repo = UserRepository.new
+    @requests = request_repo.find(params[:id])
+    @users = user_repo.find(@requests.user_id)
+    listing = listing_repo.find(@requests.listing_id)
+    @spaces = space_repo.find(listing.space_id)
+    return erb :request, :layout => :main_layout
   end
 end

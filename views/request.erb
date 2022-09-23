@@ -1,0 +1,23 @@
+<h1> Request for '<%= @spaces.name %>' </h1>
+
+<p> From: <%= @users.email %> </p>
+<p> Date: <%= @requests.date %> </p>
+<p> Status: <%= @requests.current_status %> </p>
+
+<% if @requests.current_status == 'pending' %>
+
+<form method="post" action="/requests/declined">
+    <input type="hidden" name="listing_id" value="<%=@request.listing_id%>" />
+    <input type="hidden" name="date" value="<%=@request.date%>" />
+    <input type="hidden" name="request_id" value="<%=@request.id%>" />
+    <input type="submit" value="Decline"/>
+</form>
+
+<form method="post" action="/requests/accepted">
+    <input type="hidden" name="listing_id" value="<%=@request.listing_id%>" />
+    <input type="hidden" name="date" value="<%=@request.date%>" />
+    <input type="hidden" name="request_id" value="<%=@request.id%>" />
+    <input type="submit" value="Confirm"/>
+</form>
+
+<%end%>

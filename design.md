@@ -20,43 +20,43 @@
 ## Tables
 
 ## Users
-Id: serial primary key
-Email: text (unique)
-password : text
-Username: text (unique)
+- Id: serial primary key
+- Email: text (unique)
+- password : text
+- Username: text (unique)
 
 ## Requests
-Id: serial primary key
-Date: date
-User_id: int foreign key
-Listing_id: int foreign key
-Status: enum (confirmed, declined, pending)
+- Id: serial primary key
+- Date: date
+- User_id: int foreign key
+- Listing_id: int foreign key
+- Status: enum (confirmed, declined, pending)
 
 ## Spaces
-Id: serial primary key
-Name: text
-Description: text
-User_id
+- Id: serial primary key
+- Name: text
+- Description: text
+- User_id
 
 ## Listings
-Id: serial primary key
-Price_per_night: numeric
-Space_id:  int foreign key
-Availability: date array
+- Id: serial primary key
+- Price_per_night: numeric
+- Space_id:  int foreign key
+- Availability: date array
 
 
 ## Routes
-Get ‘/’
-Get ‘/sessions/new’
-Get ‘/spaces’
-Get ‘/spaces/new’
-Get ‘/spaces/:id’
-Get ’/requests’
-Get ’/requests/:id’
+- Get ‘/’
+- Get ‘/sessions/new’
+- Get ‘/spaces
+- Get ‘/spaces/new’
+- Get ‘/spaces/:id’
+- Get ’/requests’
+- Get ’/requests/:id’
 
-Post ‘/users’
-Post ‘/spaces’
-Post ‘/requests’
+- Post ‘/users’
+- Post ‘/spaces’
+- Post ‘/requests’
 
-Patch ‘/requests/accepted’
-Patch ‘/requests/declined’
+- Patch ‘/requests/accepted’
+- Patch ‘/requests/declined’

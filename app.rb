@@ -126,7 +126,7 @@ class Application < Sinatra::Base
       repo = SpaceRepository.new
       @space = repo.find(id)
       listing_repo = ListingRepository.new
-      @listings = listing_repo.find(@space.id)
+      @listings = listing_repo.find_by_space(@space.id)
       return erb :space, :layout => :main_layout
     end
   end

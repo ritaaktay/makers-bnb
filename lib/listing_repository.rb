@@ -45,7 +45,7 @@ class ListingRepository
     DatabaseConnection.exec_params(sql,params)
   end
 
-  def find(space_id)
+  def find_by_space(space_id)
     sql = 'SELECT * FROM listings WHERE space_id = $1'
     params = [space_id]
     listings_set = DatabaseConnection.exec_params(sql,params)

@@ -53,7 +53,7 @@ RSpec.describe ListingRepository do
 
   it 'finds listings by space.id' do
     space_id = 2
-    listings = repo.find(space_id)
+    listings = repo.find_by_space(space_id)
     first_listing = listings.first
     last_listing = listings.last
     expect(first_listing.id).to eq 2

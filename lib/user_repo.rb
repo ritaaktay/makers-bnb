@@ -33,7 +33,6 @@ class UserRepository
     return user
   end
 
-  # NOT TESTED, IN PROGRESS!!!!!!!!!!!!!!!!!!!!!
   def requests_made(id)
     sql = 'SELECT requests.id, requests.listing_id, requests.date, requests.current_status,
                 listings.space_id, spaces.name
@@ -43,10 +42,38 @@ class UserRepository
             WHERE requests.user_id = $1;'
     params = [id]
     result = DatabaseConnection.exec_params(sql, params)
+    requests = []
+    result.each do |row|
+      request = Request.new
+      request.id = row['id'].to_i
+      request.user_id = id
+      request.listing_id = row['listing_id'].to_i
+      request.date = row['date']
+      request.current_status = row['current_status']
+      requests << {request: request, space_id: row['space_id'].to_i, space_name: row['name']}
+    end
+    return requests
   end
 
-  # todo after requests_made
   def requests_received(id)
-
+    sql = 'SELECT requests.id, requests.listing_id, requests.date, requests.current_status,
+              listings.space_id, spaces.name
+          FROM spaces
+          JOIN listings ON listings.space_id = spaces.id
+          JOIN requests ON listings.id = requests.listing_id
+          WHERE spaces.user_id = $1;'
+    params = [id]
+    result = DatabaseConnection.exec_params(sql, params)
+    requests = []
+    result.each do |row|
+      request = Request.new
+      request.id = row['id'].to_i
+      request.user_id = id
+      request.listing_id = row['listing_id'].to_i
+      request.date = row['date']
+      request.current_status = row['current_status']
+      requests << {request: request, space_id: row['space_id'].to_i, space_name: row['name']}
+    end
+    return requests
   end
 end

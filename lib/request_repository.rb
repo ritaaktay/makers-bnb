@@ -1,5 +1,3 @@
-require 'request'
-
 class RequestRepository
 
   # Find all requests

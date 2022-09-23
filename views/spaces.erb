@@ -6,8 +6,10 @@
     <% @spaces.each do |space| %>
 
     <div>
+    <a href="/spaces/<%= space.id %>">
 	<h3> <%= space.id %>. <%= space.name %> </h3>
-	<p> <%= space.description %> </p>
-	</div>
+    </a>
+    <p> <%= space.description %> </p>
+    </div>
 				
     <% end %>

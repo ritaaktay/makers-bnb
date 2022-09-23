@@ -29,6 +29,7 @@ INSERT INTO listings (price_per_night, availability, space_id)
       DATE '2022-07-11'
     ],
     2),
+-- separate dates unavailable(start date - end date)
     (20, ARRAY [
       DATE '2022-06-19',
       DATE '2022-10-20',

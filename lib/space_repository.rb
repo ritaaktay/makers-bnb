@@ -29,9 +29,22 @@ class SpaceRepository
   
   def create(space)
     sql = 'INSERT INTO spaces (user_id, name, description)
-            VALUES ($1, $2, $3);'
+            VALUES ($1, $2, $3) RETURNING id;'
     params = [space.user_id, space.name, space.description]
-    DatabaseConnection.exec_params(sql, params)
-    return nil
+    result = DatabaseConnection.exec_params(sql, params)
+    return result.first['id']
+  end
+
+  def find(id)
+    sql = 'SELECT * FROM spaces WHERE id = $1'
+    params = [id]
+    result = DatabaseConnection.exec_params(sql, params)
+
+    space = Space.new
+    space.id = result.first['id'].to_i
+    space.name = result.first['name']
+    space.description = result.first['description']
+    space.user_id = result.first['user_id'].to_i
+    return space
   end
 end

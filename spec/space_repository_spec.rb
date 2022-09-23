@@ -47,4 +47,12 @@ describe SpaceRepository do
       expect(last_space.description).to eq 'The best space ever'
     end
   end
+
+  context '#find(id)' do
+    it 'finds the space with the id given' do
+      space = repo.find(1)
+      expect(space.name).to eq 'Super fancy awesome apartment'
+      expect(space.description).to eq 'The best in the neighbourhood, large fridge and awesome view.'
+    end
+  end
 end

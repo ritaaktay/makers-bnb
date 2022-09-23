@@ -79,16 +79,23 @@ class Application < Sinatra::Base
   get '/spaces' do
     repo = SpaceRepository.new
     @spaces = repo.all
-    return erb :spaces, :layout => :main_layout
+    if session[:user_id].nil?
+      return erb :login
+    else
+      return erb :spaces, :layout => :main_layout
+    end 
   end
 
   post '/spaces' do
-    
     redirect '/spaces/new'
   end
 
   get '/spaces/new' do
-    return erb :new_space, :layout => :main_layout
+    if session[:user_id].nil?
+      return erb :login
+    else
+      return erb :new_space, :layout => :main_layout
+    end 
   end
 
   post '/spaces/new' do
@@ -97,6 +104,7 @@ class Application < Sinatra::Base
     list_repo = ListingRepository.new
     listing = Listing.new
 
+    space.user_id = session[:user_id]
     space.name = params[:name]
     space.description = params[:description]
     listing.price_per_night = params[:price_per_night]
@@ -105,14 +113,27 @@ class Application < Sinatra::Base
     end_date = Date.parse(params[:end_date])
     # a range of date obejects stored in an array
     listing.availability = (start_date..end_date).to_a
-    listing.space_id = space.id
-
-    repo.create(space)
+    listing.space_id = repo.create(space)
+ 
     list_repo.create(listing)
 
     redirect '/spaces'
   end
 
+  get '/spaces/:id' do
+    
+    if session[:user_id].nil?
+      return erb :login
+    else
+      id = params[:id]
+      @user_id = session[:user_id]
+      repo = SpaceRepository.new
+      @space = repo.find(id)
+      listing_repo = ListingRepository.new
+      @listings = listing_repo.find_by_space(@space.id)
+      return erb :space, :layout => :main_layout
+    end
+  end
   ############################## REQUESTS ##############################
 
   get '/requests' do

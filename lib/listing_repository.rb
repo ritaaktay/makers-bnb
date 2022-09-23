@@ -45,6 +45,24 @@ class ListingRepository
     DatabaseConnection.exec_params(sql,params)
   end
 
+  def find_by_space(space_id)
+    sql = 'SELECT * FROM listings WHERE space_id = $1'
+    params = [space_id]
+    listings_set = DatabaseConnection.exec_params(sql,params)
+    listings = []
+    listings_set.each do |record|
+      listing = Listing.new
+      listing.id = record['id'].to_i
+      listing.price_per_night = record['price_per_night'].to_i
+      dates = record['availability']
+      array = dates[1...dates.length-1].split(",")
+      listing.availability = array.map!{ |date| Date.parse(date)}
+      listing.space_id = record['space_id'].to_i
+      listings << listing
+    end
+    return listings
+  end
+  
   def find(id)
     sql = 'SELECT * FROM listings WHERE id = $1;'
     params = [id]

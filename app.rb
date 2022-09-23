@@ -109,4 +109,8 @@ class Application < Sinatra::Base
 
     redirect '/spaces'
   end
+
+  get '/spaces/:id' do
+    return erb :space, :layout => :main_layout
+  end
 end

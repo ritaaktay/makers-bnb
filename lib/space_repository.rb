@@ -23,4 +23,17 @@ class SpaceRepository
     DatabaseConnection.exec_params(sql, params)
     return nil
   end
+
+  def find(id)
+    sql = 'SELECT * FROM spaces WHERE id = $1'
+    params = [id]
+    result = DatabaseConnection.exec_params(sql, params)
+
+    space = Space.new
+    space.id = result.first['id'].to_i
+    space.name = result.first['name']
+    space.description = result.first['description']
+    space.user_id = result.first['user_id'].to_i
+    return space
+  end
 end
